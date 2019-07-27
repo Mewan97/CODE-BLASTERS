@@ -1,121 +1,118 @@
-/**
- * Copyright (c) 2001-2019 Mathew A. Nelson and Robocode contributors
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * https://robocode.sourceforge.io/license/epl-v10.html
- */
-package sample;
 
+import robocode.*;
+// import java.awt.*;
 
-import robocode.HitByBulletEvent;
-import robocode.HitRobotEvent;
-import robocode.AlphaBot;
-import robocode.ScannedRobotEvent;
-
-import java.awt.*;
-
+// API help : http://robocode.sourceforge.net/docs/robocode/robocode/Robot.html
 
 /**
- * RamFire - a sample robot by Mathew Nelson.
- * <p>
- * Drives at robots trying to ram them.
- * Fires when it hits them.
- *
- * @author Mathew A. Nelson (original)
- * @author Flemming N. Larsen (contributor)
+ * CodeBlasters - a robot by (your name here)
  */
-public class CodeBlasters extends AlphaBot{
-    int turnDirection = 120; // Clockwise or counterclockwise
-    int dist = 50; // distance to move when we're hit
-    /**
-     * run: Spin around looking for a target
-     */
-    public void run() {
-        // Set colors
-        setBodyColor(Color.lightGray);
-        setGunColor(Color.gray);
-        setRadarColor(Color.darkGray);
+public class CodeBlasters extends AlphaBot
+{
+	/**
+	 * run: CodeBlasters's default behavior
+	 */
+	
+	/*boolean peek; // Don't turn if there's a robot there
+	double moveAmount;*/
 
-        // Spin the gun around slowly... forever
-        while (true) {
-            turnRight(5 * turnDirection);
-        }
-    }
+	public void run() {
+		// Initialization of the robot should be put here
 
-    public void onHitByBullet(HitByBulletEvent e) {
-        if (getEnergy() > 16) {
-            fire(3);
-        } else if (getEnergy() > 10) {
-            fire(2);
-        } else if (getEnergy() > 4) {
-            fire(1);
-        } else if (getEnergy() > 2) {
-            fire(.5);
-        } else if (getEnergy() > .4) {
-            fire(.1);
-        }
-        ahead(40);
-    }
+		// After trying out your robot, try uncommenting the import at the top,
+		// and the next line:
 
-    /**
-     * onScannedRobot:  Fire!
-     */
-    public void onScannedRobot(ScannedRobotEvent e) {
-        if (e.getBearing() >= 0) {
-            turnDirection = 1;
-        } else {
-            turnDirection = -1;
-        }
+		// setColors(Color.red,Color.blue,Color.green); // body,gun,radar
 
-        turnRight(e.getBearing());
-        ahead(e.getDistance() + 5);
-        scan(); // Might want to move ahead again!
-    }
+		// Robot main loop
+		
+		/*peek = false;
+		turnLeft(getHeading() % 90);
+		ahead(moveAmount);
+		peek = true;
+		turnGunRight(90);
+		turnRight(90);
+		while (true) {
+			// Look before we turn when ahead() completes.
+			peek = true;
+			// Move up the wall
+			ahead(moveAmount);
+			// Don't look now
+			peek = false;
+			// Turn to the next wall
+			turnRight(90);
+		}*/
 
-    /**
-     * onHitByBullet:  Turn perpendicular to the bullet, and move a bit.
-     */
-    public void onHitByBullet(HitByBulletEvent e) {
 
-        if (getEnergy() > 16) {
-            fire(3);
-        } else if (getEnergy() > 10) {
-            fire(2);
-        } else if (getEnergy() > 4) {
-            fire(1);
-        } else if (getEnergy() > 2) {
-            fire(.5);
-        } else if (getEnergy() > .4) {
-            fire(.1);
-        }
-        ahead(40);
-    }
+		while(true) {
+			// Replace the next 4 lines with any behavior you would like
+			ahead(100);
+			turnGunRight(360);
+			back(100);
+			turnGunRight(360);
+			
+			
 
-    /**
-     * onHitRobot:  Aim at it.  Fire Hard!
-     */
-    public void onHitRobot(HitRobotEvent e) {
-        if (e.getBearing() >= 0) {
-            turnDirection = 1;
-        } else {
-            turnDirection = -1;
-        }
-        turnRight(e.getBearing());
+			
+		}
+		
+	}
 
-        // Determine a shot that won't kill the robot...
-        // We want to ram him instead for bonus points
-        if (e.getEnergy() > 16) {
-            fire(3);
-        } else if (e.getEnergy() > 10) {
-            fire(2);
-        } else if (e.getEnergy() > 4) {
-            fire(1);
-        } else if (e.getEnergy() > 2) {
-            fire(.5);
-        } else if (e.getEnergy() > .4) {
-            fire(.1);
-        }
-        ahead(40); // Ram him again!
-    }
+	/**
+	 * onScannedRobot: What to do when you see another robot
+	 */
+	public void onScannedRobot(ScannedRobotEvent e) {
+		// Replace the next line with any behavior you would like
+		double distance = e.getDistance(); //get the distance of the scanned robot
+		
+		double angle = e.getBearing();
+
+    	if(distance > 200) //this conditions adjust the fire force according the distance of the scanned robot.
+     		fire(4);
+    	else
+        	fire(2);
+			
+			turnRight(angle);
+			ahead(distance/2);
+		}
+		
+		
+
+	/**
+	 * onHitByBullet: What to do when you're hit by a bullet
+	 */
+	public void onHitByBullet(HitByBulletEvent e) {
+		// Replace the next line with any behavior you would like
+		double angle = e.getBearing();
+		turnRight(-angle);
+		ahead(50);
+
+	}
+	
+	/**
+	 * onHitWall: What to do when you hit a wall
+	 */
+	public void onHitWall(HitWallEvent e) {
+		// Replace the next line with any behavior you would like
+		
+		double energy = getEnergy();
+
+		double bearing = e.getBearing(); //Get the direction which is arrived the bullet.
+    	if(energy < 100){ // if the energy is low, the robot go away from the enemy
+        	turnRight(-bearing); //This isn't accurate but release your robot.
+        	ahead(100); //The robot goes away from the enemy.
+    	}
+    	else{
+        	turnRight(360);
+			ahead(50);
+		}	
+			
+	}
+	
+	public void onHitRobot(HitRobotEvent e){
+		double angle = e.getBearing();
+		turnRight(angle);		
+		ahead(50);
+
+	}	
 }
