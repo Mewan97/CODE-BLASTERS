@@ -1,8 +1,6 @@
 
 import robocode.*;
 
-import java.awt.*;
-
 public class CodeBlasters extends CharlieBot {
 	int turnDirection = 1;
 
