@@ -43,6 +43,20 @@ public class CodeBlasters extends AlphaBot{
         }
     }
 
+    public void onHitByBullet(HitByBulletEvent e) {
+        if (getEnergy() > 16) {
+            fire(3);
+        } else if (getEnergy() > 10) {
+            fire(2);
+        } else if (getEnergy() > 4) {
+            fire(1);
+        } else if (getEnergy() > 2) {
+            fire(.5);
+        } else if (getEnergy() > .4) {
+            fire(.1);
+        }
+        ahead(40);
+    }
 
     /**
      * onScannedRobot:  Fire!
@@ -63,18 +77,19 @@ public class CodeBlasters extends AlphaBot{
      * onHitByBullet:  Turn perpendicular to the bullet, and move a bit.
      */
     public void onHitByBullet(HitByBulletEvent e) {
-       if (getEnergy() > 16) {
-			    fire(3);
-		   } else if (getEnergy() > 10) {
-			    fire(2);
-		   } else if (getEnergy() > 4) {
-			  fire(1);
-		   } else if (getEnergy() > 2) {
-			  fire(.5);
-		    } else if (getEnergy() > .4) {
-			fire(.1);
-		}
-		ahead(40);
+
+        if (getEnergy() > 16) {
+            fire(3);
+        } else if (getEnergy() > 10) {
+            fire(2);
+        } else if (getEnergy() > 4) {
+            fire(1);
+        } else if (getEnergy() > 2) {
+            fire(.5);
+        } else if (getEnergy() > .4) {
+            fire(.1);
+        }
+        ahead(40);
     }
 
     /**
